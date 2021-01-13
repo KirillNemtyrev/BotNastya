@@ -25,7 +25,8 @@ bot.event('message_new', async (ctx) => {
         const data = moment().utcOffset("+03:00").toObject(); // Получение даты
         const iHour = data.hours // Константа: Присваивания часа
         const iMinute = data.minutes; // Константа: Присваивания минут
-        const iDay = data.getDay(); // Констанста: получение дня
+        const d = new Date();
+        const iDay = d.getDay(); // Констанста: получение дня
         await ctx.reply(`${iHour}:${iMinute} День: ${iDay}`)
         return true;
     }
