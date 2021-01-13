@@ -20,17 +20,6 @@ async function RegisterChat(ChatID)
 }
 // Отслеживание всех сообщений
 bot.event('message_new', async (ctx) => {
-    if(ctx.message.from_id == ctx.message.peer_id)
-    {
-        const data = moment().utcOffset("+03:00").toObject(); // Получение даты
-        const iHour = data.hours // Константа: Присваивания часа
-        const iMinute = data.minutes; // Константа: Присваивания минут
-        const d = new Date();
-        const iDay = d.getDay(); // Констанста: получение дня
-        await ctx.reply(`${iHour}:${iMinute} День: ${iDay}`)
-        return true;
-    }
-
     if(ctx.message.from_id != ctx.message.peer_id)
     {
         if (!await Chat.findOne({ID: ctx.message.peer_id}).exec())
@@ -43,12 +32,17 @@ async function SendMessageList()
     const data = moment().utcOffset("+03:00").toObject(); // Получение даты
     const iHour = data.hours // Константа: Присваивания часа
     const iMinute = data.minutes; // Константа: Присваивания минут
-    const iDay = data.day; // Констанста: получение дня
-    /*for(const chat of await Chat.find({}))
+    const d = new Date();
+    const iDay = d.getDay(); // Констанста: получение дня
+    if((iHour == 9 && iMinute == 0) || (iHour == 15 && iMinute == 0) || (iHour == 19 && iMinute == 11))
     {
-    }*/
+        for(const chat of await Chat.find({}))
+        {
+            await bot.sendMessage(chat.ID, `@all, Напоминаю, что сегодня мы сдаём температурные листки!\nНе забываем писать температуру [${eltech8}|боту]!`);
+        }
+    }
 }
 // Функция бота: запуск бота
 bot.startPolling(); 
 // Интервал
-//setInterval(SendMessageList, 3600000);
+setInterval(SendMessageList, 60000);
