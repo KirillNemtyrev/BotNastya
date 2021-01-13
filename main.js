@@ -21,10 +21,20 @@ async function RegisterChat(ChatID)
 // Отслеживание всех сообщений
 bot.event('message_new', async (ctx) => {
     if(ctx.message.from_id == ctx.message.peer_id)
+    {
+        const data = moment().utcOffset("+03:00").toObject(); // Получение даты
+        const iHour = data.hours // Константа: Присваивания часа
+        const iMinute = data.minutes; // Константа: Присваивания минут
+        const iDay = data.day; // Констанста: получение дня
+        await ctx.reply(`${iHour}:${iMinute} День: ${iDay}`)
         return true;
+    }
 
-    if (!await Chat.findOne({ID: ctx.message.peer_id}).exec())
-        return await RegisterChat(ctx.message.peer_id);
+    if(ctx.message.from_id != ctx.message.peer_id)
+    {
+        if (!await Chat.findOne({ID: ctx.message.peer_id}).exec())
+            return await RegisterChat(ctx.message.peer_id);
+    }
 });
 // Асинхронная функция: Поиск игроков
 async function SendMessageList()
@@ -33,7 +43,6 @@ async function SendMessageList()
     const iHour = data.hours // Константа: Присваивания часа
     const iMinute = data.minutes; // Константа: Присваивания минут
     const iDay = data.day; // Констанста: получение дня
-    console.log(iDay)
     /*for(const chat of await Chat.find({}))
     {
     }*/
@@ -41,4 +50,4 @@ async function SendMessageList()
 // Функция бота: запуск бота
 bot.startPolling(); 
 // Интервал
-setInterval(SendMessageList, 1000);
+//setInterval(SendMessageList, 3600000);
