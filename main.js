@@ -33,7 +33,7 @@ async function SendMessageList()
     const iHour = data.hours // Константа: Присваивания часа
     const d = new Date();
     const iDay = d.getDay(); // Констанста: получение дня
-    if((iHour == 9 || iHour == 15 || iHour == 18) && iDay == 6)
+    if((iHour == 9 || iHour == 16 || iHour == 18) && iDay == 6)
     {
         for(const chat of await Chat.find({}))
         {
